@@ -1,7 +1,7 @@
 import {
   AbstractMesh,
-  ArcRotateCamera,
   Engine,
+  FollowCamera,
   HemisphericLight,
   Scene,
   SceneLoader,
@@ -10,11 +10,13 @@ import {
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
 import "@babylonjs/loaders";
+import { Control } from "./engine/Control";
 import { Shapes } from "./shapes/Shapes";
 
 class App {
   private carMesh: AbstractMesh = null;
-  private camera: ArcRotateCamera;
+  private camera: FollowCamera = null;
+  private control: Control = new Control();
 
   constructor() {
     let canvas = document.createElement("canvas");
@@ -26,15 +28,13 @@ class App {
     let engine = new Engine(canvas, true);
     let scene = new Scene(engine);
 
-    this.camera = new ArcRotateCamera(
-      "Camera",
-      Math.PI / 2,
-      Math.PI / 2,
-      20,
-      new Vector3(10, 5, 0),
-      scene
-    );
-    this.camera.attachControl(canvas, true);
+    window.addEventListener("keydown", this.control.handleKeyDown);
+    window.addEventListener("keyup", this.control.handleKeyUp);
+
+    this.camera = new FollowCamera("FollowCam", new Vector3(0, 0, 0), scene);
+    this.camera.heightOffset = 10;
+    this.camera.radius = 10;
+    this.camera.rotationOffset = 180;
 
     new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
 
@@ -49,6 +49,7 @@ class App {
     SceneLoader.ImportMesh("", "models/", "car.glb", scene, (meshes) => {
       this.carMesh = meshes[0];
       this.carMesh.position = new Vector3(0, 0, 0);
+      this.camera.lockedTarget = this.carMesh;
     });
 
     const shapes = new Shapes(scene);
@@ -68,7 +69,16 @@ class App {
 
     engine.runRenderLoop(() => {
       if (this.carMesh) this.carMesh.position.z += 0.01;
-      console.log("rendering...");
+      if (this.carMesh) this.carMesh.position.z += 0.01;
+
+      if (this.control.moveLeft && this.carMesh.position.x > -3.5) {
+        this.carMesh.position.x -= this.control.speed;
+      }
+      if (this.control.moveRight && this.carMesh.position.x < 3.5) {
+        this.carMesh.position.x += this.control.speed;
+      }
+      // console.log("rendering...");
+      // console.log(this.camera.position);
       scene.render();
     });
   }
