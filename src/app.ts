@@ -68,14 +68,18 @@ class App {
     });
 
     engine.runRenderLoop(() => {
-      if (this.carMesh) this.carMesh.position.z += 0.01;
-      if (this.carMesh) this.carMesh.position.z += 0.01;
+      if (!this.carMesh) return;
+
+      this.carMesh.position.z += 0.05;
 
       if (this.control.moveLeft && this.carMesh.position.x > -3.5) {
         this.carMesh.position.x -= this.control.speed;
-      }
-      if (this.control.moveRight && this.carMesh.position.x < 3.5) {
+        this.carMesh.rotation = new Vector3(0, 3, 0);
+      } else if (this.control.moveRight && this.carMesh.position.x < 3.5) {
         this.carMesh.position.x += this.control.speed;
+        this.carMesh.rotation = new Vector3(0, 3.28, 0);
+      } else {
+        this.carMesh.rotation = new Vector3(0, 3.14, 0);
       }
 
       scene.render();
