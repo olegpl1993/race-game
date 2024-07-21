@@ -14,8 +14,8 @@ import { Control } from "./engine/Control";
 import { Shapes } from "./shapes/Shapes";
 
 class App {
-  private carMesh: AbstractMesh = null;
-  private camera: FollowCamera = null;
+  private carMesh: AbstractMesh;
+  private camera: FollowCamera;
   private control: Control = new Control();
 
   constructor() {
@@ -77,8 +77,7 @@ class App {
       if (this.control.moveRight && this.carMesh.position.x < 3.5) {
         this.carMesh.position.x += this.control.speed;
       }
-      // console.log("rendering...");
-      // console.log(this.camera.position);
+
       scene.render();
     });
   }
