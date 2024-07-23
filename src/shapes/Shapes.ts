@@ -3,7 +3,7 @@ import { Mesh, MeshBuilder, Scene, Vector3 } from "@babylonjs/core";
 export class Shapes {
   constructor(private scene: Scene) {}
 
-  createSphere({ x, y, z }: { x: number; y: number; z: number }): Mesh {
+  createSphere = ({ x, y, z }: { x: number; y: number; z: number }): Mesh => {
     const sphere: Mesh = MeshBuilder.CreateSphere(
       "sphere1",
       { diameter: 1 },
@@ -13,7 +13,7 @@ export class Shapes {
     return sphere;
   }
 
-  createCube({ x, y, z }: { x: number; y: number; z: number }): Mesh {
+  createCube = ({ x, y, z }: { x: number; y: number; z: number }): Mesh => {
     const cube: Mesh = MeshBuilder.CreateBox(
       "cube1",
       { width: 1, height: 1, depth: 1 },

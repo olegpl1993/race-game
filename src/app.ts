@@ -19,7 +19,7 @@ class App {
   private carMesh: AbstractMesh;
   private camera: FollowCamera;
   private control: Control = new Control();
-  private carSpeed: number = 0.1;
+  private carSpeed: number = 0.05;
   private collision: Collision;
 
   constructor() {
@@ -57,8 +57,6 @@ class App {
     engine.runRenderLoop(() => {
       if (!this.carMesh) return;
 
-      console.log(this.carSpeed);
-
       if (this.control.moveLeft && this.carMesh.position.x > -3.5) {
         this.carMesh.position.x -= this.control.speed;
         this.carMesh.rotation = new Vector3(0, 3, 0);
@@ -77,10 +75,9 @@ class App {
     });
   }
 
-  restartTrack(): void {
+  restartTrack = () => {
     this.carMesh.position = new Vector3(0, 0, 0);
     this.carSpeed = 0.05;
-    console.log("restartTrack");
-  }
+  };
 }
 new App();
