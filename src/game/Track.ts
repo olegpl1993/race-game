@@ -10,7 +10,7 @@ export class Track {
     this.shapes = new Shapes(scene);
   }
 
-  createTrack(): void {
+  createTrack = (): void => {
     SceneLoader.ImportMesh(
       "",
       "models/",
@@ -37,5 +37,5 @@ export class Track {
         }
       }
     );
-  }
+  };
 }
