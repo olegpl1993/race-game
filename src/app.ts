@@ -10,8 +10,9 @@ import {
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
 import "@babylonjs/loaders";
+import { Collision } from "./engine/Collision";
 import { Control } from "./engine/Control";
-import { Track } from "./engine/Track";
+import { Track } from "./game/Track";
 import { openInspector } from "./utils/openInspector";
 
 class App {
@@ -19,6 +20,7 @@ class App {
   private camera: FollowCamera;
   private control: Control = new Control();
   private carSpeed: number = 0.1;
+  private collision: Collision;
 
   constructor() {
     let canvas = document.createElement("canvas");
@@ -35,17 +37,18 @@ class App {
     window.addEventListener("keydown", this.control.handleKeyDown);
     window.addEventListener("keyup", this.control.handleKeyUp);
 
+    new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
+
     this.camera = new FollowCamera("FollowCam", new Vector3(0, 0, 0), scene);
     this.camera.rotationOffset = 180;
     this.camera.heightOffset = 6;
     this.camera.radius = 10;
 
-    new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
-
     SceneLoader.ImportMesh("", "models/", "car.glb", scene, (meshes) => {
       this.carMesh = meshes[0];
       this.carMesh.position = new Vector3(0, 0, 0);
       this.camera.lockedTarget = this.carMesh;
+      this.collision = new Collision(this.carMesh, track, this.restartTrack);
     });
 
     // hide/show the Inspector Shift+Ctrl+Alt+I
@@ -54,7 +57,7 @@ class App {
     engine.runRenderLoop(() => {
       if (!this.carMesh) return;
 
-      this.carMesh.position.z += this.carSpeed;
+      console.log(this.carSpeed);
 
       if (this.control.moveLeft && this.carMesh.position.x > -3.5) {
         this.carMesh.position.x -= this.control.speed;
@@ -66,8 +69,18 @@ class App {
         this.carMesh.rotation = new Vector3(0, 3.14, 0);
       }
 
+      this.carMesh.position.z += this.carSpeed;
+      this.carSpeed += 0.0001;
+      this.collision.checkCollision();
+
       scene.render();
     });
+  }
+
+  restartTrack(): void {
+    this.carMesh.position = new Vector3(0, 0, 0);
+    this.carSpeed = 0.05;
+    console.log("restartTrack");
   }
 }
 new App();
