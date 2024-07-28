@@ -19,7 +19,7 @@ export class Track {
       (meshes) => {
         meshes[0].position = new Vector3(0, 0, 0);
 
-        for (let i = -1; i <= 200; i++) {
+        for (let i = -1; i <= 300; i++) {
           const newPlatform = meshes[0].clone(`platform_${i}`, null);
           if (newPlatform) {
             newPlatform.position = new Vector3(0, 0, i * 5);
