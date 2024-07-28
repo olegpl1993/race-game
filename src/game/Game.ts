@@ -18,7 +18,7 @@ export class Game {
   private collision: Collision;
   private control = new Control();
 
-  startGame(engine: Engine, scene: Scene) {
+  startGame = (engine: Engine, scene: Scene) => {
     const track = new Track(scene);
     track.createTrack();
 
@@ -55,7 +55,7 @@ export class Game {
 
       scene.render();
     });
-  }
+  };
 
   restartTrack = () => {
     this.carMesh.position = new Vector3(0, 0, 0);
