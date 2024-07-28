@@ -53,6 +53,8 @@ export class Game {
       this.carSpeed += 0.0001;
       this.collision.checkCollision();
 
+      console.log(engine.getFps());
+
       scene.render();
     });
   };
