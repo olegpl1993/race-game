@@ -3,6 +3,11 @@ export class Control {
   public moveRight: boolean = false;
   public speed: number = 0.1;
 
+  constructor() {
+    window.addEventListener("keydown", this.handleKeyDown);
+    window.addEventListener("keyup", this.handleKeyUp);
+  }
+
   handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "ArrowLeft" || event.key === "a") {
       this.moveLeft = true;
